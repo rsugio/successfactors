@@ -16,7 +16,7 @@ public class TestSet {
 
     @Test
     public void stack() {
-        LinkedList<String> stack = new LinkedList<String>();
+        LinkedList<String> stack = new LinkedList<>();
         stack.push("1");
         stack.push("2");
         stack.push("3");
