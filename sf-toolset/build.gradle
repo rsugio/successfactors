@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'application'
+}
+
+group 'sf.io.rsug'
+version '0.0.1'
+description "SF API toolset"
+
+//sourceCompatibility = '1.8'
+//targetCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+//    api ''
+//    implementation ''
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+application {
+    mainClassName = 'MainCompound'
+    applicationDefaultJvmArgs = ['-ea']
+}
+
+jar {
+    from sourceSets.main.allSource
+    manifest {
+        attributes(
+                'Implementation-Title': 'SFAPIToolset',
+                'Implementation-Version': archiveVersion.getOrNull(),
+                "Implementation-Vendor": "rsug.io"
+        )
+    }
+}

@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<S:Envelope xmlns:S="http://www.w3.org/2003/05/soap-envelope">
+    <S:Body>
+        <loginResponse xmlns="urn:sfobject.sfapi.successfactors.com">
+            <result>
+                <sessionId>7ED171D9E00649642FF24FFA1329BBCD.eu-abef740eb</sessionId>
+                <msUntilPwdExpiration>4389877658</msUntilPwdExpiration>
+            </result>
+        </loginResponse>
+    </S:Body>
+</S:Envelope>
