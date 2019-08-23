@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<S:Envelope xmlns:S="http://www.w3.org/2003/05/soap-envelope">
+    <S:Body>
+        <ns3:Fault xmlns:ns3="http://www.w3.org/2003/05/soap-envelope">
+            <ns3:Code>
+                <ns3:Value>ns3:Receiver</ns3:Value>
+            </ns3:Code>
+            <ns3:Reason>
+                <ns3:Text xml:lang="en">Invalid SFAPI session!</ns3:Text>
+            </ns3:Reason>
+            <ns3:Detail>
+                <SFWebServiceFault:SFWebServiceFault xmlns:SFWebServiceFault="urn:fault.sfapi.successfactors.com"
+                                                     xmlns="urn:fault.sfapi.successfactors.com">
+                    <errorCode>INVALID_SESSION</errorCode>
+                    <errorMessage>Invalid SFAPI session!</errorMessage>
+                </SFWebServiceFault:SFWebServiceFault>
+            </ns3:Detail>
+        </ns3:Fault>
+    </S:Body>
+</S:Envelope>
