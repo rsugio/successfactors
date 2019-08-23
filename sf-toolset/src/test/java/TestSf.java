@@ -1,6 +1,8 @@
 import io.rsug.sf.SFHost;
 import io.rsug.sf.compound.CEAPI;
 import io.rsug.sf.compound.CEQueryResults;
+import io.rsug.sf.compound.CEResponse;
+import io.rsug.sf.compound.CEResponseLogin;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,15 +17,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class TestSf {
-    Reader ceMetadata = null, ceQueryResponse = null, ceLoginResponse = null;
+    Reader ceMetadata = null, ceQueryResponse = null, ceLoginResponse = null, ceFault = null;
 
     @Before
     public void initialize() {
         ceMetadata = new InputStreamReader(getClass().getResourceAsStream("/CompoundEmployee-Metadata.xml"), StandardCharsets.UTF_8);
         ceQueryResponse = new InputStreamReader(getClass().getResourceAsStream("/CompoundEmployee-QueryResponse-OK.xml"), StandardCharsets.UTF_8);
         ceLoginResponse = new InputStreamReader(getClass().getResourceAsStream("/CompoundEmployee-LoginResponse-OK.xml"), StandardCharsets.UTF_8);
+        ceFault = new InputStreamReader(getClass().getResourceAsStream("/CompoundEmployee-DescribeEx-Error.xml"), StandardCharsets.UTF_8);
     }
 
     @After
@@ -71,8 +75,10 @@ public class TestSf {
 
     @Test
     public void loginResponse() throws XMLStreamException {
-        //TODO add error samples and change CEAPI.parseLoginResponse result
-        assertEquals("7ED171D9E00649642FF24FFA1329BBCD.eu-abef740eb", CEAPI.parseLoginResponse(ceLoginResponse));
+        CEResponseLogin zz = new CEResponseLogin(ceLoginResponse, 200, "OK", "application/soap+xml;charset=utf-8");
+        assertEquals("7ED171D9E00649642FF24FFA1329BBCD.eu-abef740eb", zz.sessionId);
+        assertEquals(4389877658L, zz.msUntilPwdExpiration);
+        assertEquals(null, zz.fault);
     }
 
     @Test
@@ -84,5 +90,15 @@ public class TestSf {
                 CEAPI.composeQuery("SELECT 123 FROM AAA", map, true, false));
         assertEquals("<SOAP:Envelope xmlns:SOAP=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:SF=\"urn:sfobject.sfapi.successfactors.com\"><SOAP:Header></SOAP:Header><SOAP:Body><SF:describeSFObjectsEx><SF:type>CompoundEmployee</SF:type></SF:describeSFObjectsEx></SOAP:Body></SOAP:Envelope>",
                 CEAPI.composeDescribeEx(true, false));
+    }
+
+    @Test
+    public void parseFailure() throws IOException, XMLStreamException {
+        CEResponse zz = new CEResponseLogin(ceFault, 500, "Internal Server Error", "application/soap+xml;charset=utf-8");
+        assertNotNull(zz.fault);
+        assertEquals("ns3:Receiver", zz.fault.codeValue);
+        assertEquals("INVALID_SESSION", zz.fault.errorCode);
+        assertEquals("Invalid SFAPI session!", zz.fault.errorMessage);
+        assertEquals("Invalid SFAPI session!", zz.fault.reasonText);
     }
 }

@@ -2,14 +2,15 @@ plugins {
     id 'java'
     id 'java-library'
     id 'application'
+    id 'maven-publish'
 }
 
-group 'sf.io.rsug'
-version '0.0.1'
+group 'io.rsug.sf'
+version '0.0.2'
 description "SF API toolset"
 
-//sourceCompatibility = '1.8'
-//targetCompatibility = '1.8'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 repositories {
     mavenCentral()
@@ -34,5 +35,16 @@ jar {
                 'Implementation-Version': archiveVersion.getOrNull(),
                 "Implementation-Vendor": "rsug.io"
         )
+    }
+}
+
+publishing {
+    publications {
+//        maven(MavenPublication) {
+//            groupId = 'io.rsug.sf'
+//            artifactId = 'sf-toolset'
+//            version = '0.0.1'
+//            from components.java
+//        }
     }
 }

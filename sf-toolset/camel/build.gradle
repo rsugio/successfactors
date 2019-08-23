@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'application'
+}
+
+group 'io.rsug.sf'
+version '0.0.2'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClassName = 'MainCamel'
+    applicationDefaultJvmArgs = ['-ea']
+}
+
+dependencies {
+    implementation fileTree(dir: 'C:/workspace/successfactors/sf-toolset/build/libs', include: 'sf-toolset-0.0.2.jar')
+//    implementation 'io.rsug.sf:sf-toolset:0.0.1'
+    implementation 'org.apache.camel:camel-core:2.24.1'
+    implementation 'org.apache.camel:camel-olingo2:2.24.1'
+    implementation 'org.apache.camel:camel-http4:2.24.1'
+
+    implementation 'org.apache.logging.log4j:log4j-core:2.6.2'
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.6.2'
+
+    // JAX-B dependencies for JDK 9+
+    implementation "javax.xml.bind:jaxb-api:2.2.11"
+    implementation "com.sun.xml.bind:jaxb-core:2.2.11"
+    implementation "com.sun.xml.bind:jaxb-impl:2.2.11"
+    implementation "javax.activation:activation:1.1.1"
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+}

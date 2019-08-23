@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="EntryPointsManager">
+    <entry_points version="2.0">
+      <entry_point TYPE="field" FQNAME="io.rsug.sf.compound.SFPortlet _internal_seqno" />
+      <entry_point TYPE="field" FQNAME="io.rsug.sf.compound.SFPortlet created_on_timestamp" />
+      <entry_point TYPE="field" FQNAME="io.rsug.sf.compound.SFPortlet last_modified_on" />
+      <entry_point TYPE="field" FQNAME="io.rsug.sf.compound.SFPortlet links" />
+      <entry_point TYPE="field" FQNAME="io.rsug.sf.compound.SFPortlet parent" />
+      <entry_point TYPE="field" FQNAME="io.rsug.sf.compound.SFObject execution_timestamp" />
+      <entry_point TYPE="field" FQNAME="io.rsug.sf.compound.SFObject version_id" />
+    </entry_points>
+    <pattern value="io.rsug.sf.SFHost" method="getBasicAuthOData" />
+    <pattern value="io.rsug.sf.compound.SFObject" method="prettyPrint" />
+  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>
