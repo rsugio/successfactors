@@ -8,7 +8,7 @@ public class SFObject {
     public String id = null, type = null, version_id = null;
     public SFPortlet hier = null;
     public Instant execution_timestamp = null;
-    public List<CELogItem> logs = new LinkedList<>();
+    public final List<CELogItem> logs = new LinkedList<>();
 
     public String prettyPrint() {
         String hd = "SFObject(" + type + ",id=" + id + ")\n";

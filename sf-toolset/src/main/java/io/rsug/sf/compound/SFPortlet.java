@@ -15,9 +15,9 @@ import java.util.List;
 public class SFPortlet {
     public final SFPortlet parent;
     public final String name;
-    public LinkedHashMap<String, String> values = new LinkedHashMap<>();
-    public LinkedHashMap<String, String> previous = new LinkedHashMap<>();
-    public List<SFPortlet> children = new ArrayList<>();
+    public final LinkedHashMap<String, String> values = new LinkedHashMap<>();
+    public final LinkedHashMap<String, String> previous = new LinkedHashMap<>();
+    public final List<SFPortlet> children = new ArrayList<>();
     public int deep = -1, seq_number = 0, _internal_seqno = 0;
     public Instant created_on_timestamp = null, last_modified_on = null;
     public LinkedHashMap<String, SFPortlet> links = new LinkedHashMap<>();
@@ -80,16 +80,16 @@ public class SFPortlet {
     public String prettyPrint() {
         assert deep >= 0;
         StringBuilder sb = new StringBuilder();
-        sb.append("[" + deep + "]" + name + " " + values + ",prev=" + previous);
+        sb.append("[").append(deep).append("]").append(name).append(" ").append(values).append(",prev=").append(previous);
         for (SFPortlet it : children) {
-            sb.append("\n" + it.prettyPrint());
+            sb.append("\n").append(it.prettyPrint());
         }
         return sb.toString();
     }
 
     public void getPortlets(String name, List<SFPortlet> lst) {
         for (SFPortlet x : children) {
-            if (x.name == name) lst.add(x);
+            if (x.name.equals(name)) lst.add(x);
             x.getPortlets(name, lst);
         }
     }

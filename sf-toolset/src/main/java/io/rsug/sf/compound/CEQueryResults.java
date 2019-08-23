@@ -15,7 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CEQueryResults {
-    public List<SFObject> objects = new ArrayList<>();
+    public final List<SFObject> objects = new ArrayList<>();
     public long numResults = 0;
     public boolean hasMore = false;
     public String querySessionId = null;

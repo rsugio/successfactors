@@ -22,7 +22,7 @@ public class SFHost {
     private String unameOData = null, pwdOData = null;
 
     public SFHost(String companyId, URI apiHost) {
-        assert companyId != null && !companyId.isEmpty() && !companyId.isBlank();
+        assert companyId != null && !companyId.isEmpty();
         assert apiHost != null;
         assert apiHost.getScheme().equals("https");
         String hn = apiHost.getHost();

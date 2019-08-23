@@ -12,7 +12,7 @@ import java.io.Reader;
 import java.util.*;
 
 public class CEAPI {
-    static Set<String> validActions = new HashSet<>();
+    static final Set<String> validActions = new HashSet<>();
 
     static {
         validActions.add("NO CHANGE");
@@ -21,8 +21,8 @@ public class CEAPI {
         validActions.add("DELETE");
     }
 
-    public Set<String> portletNames = new HashSet<>();
-    List<CEAPIField> fields = new LinkedList<>();
+    public final Set<String> portletNames = new HashSet<>();
+    final List<CEAPIField> fields = new LinkedList<>();
 // https://help.sap.com/viewer/5bb9a5b997a843c88e769a105e4af4d4/1908/en-US/48960ce137694e25be5e728c852ae1f6.html
 // KBA 2785228 - SuccessFactors Compound Employee API Country Specific fields - SuccessFactors API (SFAPI)
 
@@ -61,37 +61,6 @@ public class CEAPI {
         ex.put(XmlNames.querySessionId, querySessionId, true);
         ex.put(null, null, true);
         return ex.closeDocument(withSOAP);
-    }
-
-    //TODO add here error handling
-    public static String parseLoginResponse(Reader rd) throws XMLStreamException {
-        XMLInputFactory xmlif = XMLInputFactory.newInstance();
-        xmlif.setProperty(XMLInputFactory.IS_COALESCING, true);
-        xmlif.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, true);
-        XMLEventReader xr = xmlif.createXMLEventReader(rd);
-        LinkedList<QName> stack = new LinkedList<>();
-        String sessionId = null; //, msUntilPwdExpiration = null;
-        while (xr.hasNext()) {
-            XMLEvent xe = xr.nextEvent();
-            if (xe.isStartElement()) {
-                StartElement se = xe.asStartElement();
-                QName qn = se.getName();
-                stack.push(qn);
-            } else if (xe.isEndElement()) {
-                EndElement ee = xe.asEndElement();
-                QName qe = ee.getName();
-                QName q = stack.pop();
-                assert qe.equals(q);
-            } else if (xe.isCharacters() && stack.size() > 1) {
-                QName qn = stack.get(0);
-                String v = xe.asCharacters().getData();
-                if (XmlNames.matches(stack, XmlNames.sessionId, XmlNames.result, XmlNames.loginResponse)) {
-                    sessionId = v;
-                }
-            }
-        }
-        assert stack.size() == 0;
-        return sessionId;
     }
 
     public static String composeDescribeEx(boolean withSOAP, boolean withPreamble) throws XMLStreamException, IOException {

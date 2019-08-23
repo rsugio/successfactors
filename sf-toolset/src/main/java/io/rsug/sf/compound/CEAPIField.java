@@ -6,9 +6,9 @@ import java.util.List;
 
 class CEAPIField {
     String name = null, labelValue = null, labelLocale = null, labelMimeType = null, dataType = null, picklistId = null;
-    LinkedHashMap<String, Boolean> properties = new LinkedHashMap<>();
+    final LinkedHashMap<String, Boolean> properties = new LinkedHashMap<>();
     int maxLength = 0;
-    List<String> supportedOperators = new LinkedList<>();
+    final List<String> supportedOperators = new LinkedList<>();
 
     public String toString() {
         return "" + name + ":" + dataType + "";
