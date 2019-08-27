@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<S:Envelope xmlns:S="http://www.w3.org/2003/05/soap-envelope">
+    <S:Body>
+        <loginResponse xmlns="urn:sfobject.sfapi.successfactors.com">
+            <result>
+                <sessionId xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+                <msUntilPwdExpiration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+                <error>
+                    <errorCode>FAILED_AUTHENTICATION</errorCode>
+                    <errorMessage>Login failure due to the invalid company!</errorMessage>
+                </error>
+            </result>
+        </loginResponse>
+    </S:Body>
+</S:Envelope>
