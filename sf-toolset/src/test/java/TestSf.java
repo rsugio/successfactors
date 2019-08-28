@@ -3,12 +3,15 @@ import io.rsug.sf.compound.CEAPI;
 import io.rsug.sf.compound.CEQueryResults;
 import io.rsug.sf.compound.CEResponse;
 import io.rsug.sf.compound.CEResponseLogin;
+import io.rsug.sf.odata.EdmxChecker;
+import org.apache.olingo.odata2.api.exception.ODataException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URI;
@@ -20,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class TestSf {
-    Reader ceMetadata = null, ceQueryResponse = null, ceLoginResponse = null, ceFault = null;
+    Reader ceMetadata = null, ceQueryResponse = null, ceLoginResponse = null, ceFault = null, ceLoginResponseFault;
 
     @Before
     public void initialize() {
@@ -28,6 +31,7 @@ public class TestSf {
         ceQueryResponse = new InputStreamReader(getClass().getResourceAsStream("/CompoundEmployee-QueryResponse-OK.xml"), StandardCharsets.UTF_8);
         ceLoginResponse = new InputStreamReader(getClass().getResourceAsStream("/CompoundEmployee-LoginResponse-OK.xml"), StandardCharsets.UTF_8);
         ceFault = new InputStreamReader(getClass().getResourceAsStream("/CompoundEmployee-DescribeEx-Error.xml"), StandardCharsets.UTF_8);
+        ceLoginResponseFault = new InputStreamReader(getClass().getResourceAsStream("/CompoundEmployee-LoginResponse-LoginFailure.xml"), StandardCharsets.UTF_8);
     }
 
     @After
@@ -69,8 +73,8 @@ public class TestSf {
 
     @Test
     public void loginRequest() throws IOException, XMLStreamException {
-        assertEquals("<SOAP:Envelope xmlns:SOAP=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:SF=\"urn:sfobject.sfapi.successfactors.com\"><SOAP:Header></SOAP:Header><SOAP:Body><SF:login><SF:credential><SF:companyId>companyId</SF:companyId><SF:username>user</SF:username><SF:password>password</SF:password></SF:credential></SF:login></SOAP:Body></SOAP:Envelope>",
-                CEAPI.composeLoginRequest("companyId", "user", "password", true, false));
+        String s = CEAPI.composeLoginRequest("companyId", "user", "password", true, false);
+        assertEquals("<SOAP:Envelope xmlns:SOAP=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:SF=\"urn:sfobject.sfapi.successfactors.com\"><SOAP:Header></SOAP:Header><SOAP:Body><SF:login><SF:credential><SF:companyId>companyId</SF:companyId><SF:username>user</SF:username><SF:password>password</SF:password></SF:credential></SF:login></SOAP:Body></SOAP:Envelope>", s);
     }
 
     @Test
@@ -79,6 +83,15 @@ public class TestSf {
         assertEquals("7ED171D9E00649642FF24FFA1329BBCD.eu-abef740eb", zz.sessionId);
         assertEquals(4389877658L, zz.msUntilPwdExpiration);
         assertEquals(null, zz.fault);
+        assertEquals(null, zz.error);
+    }
+
+    @Test
+    public void loginResponseFailure1() throws XMLStreamException {
+        CEResponseLogin zz = new CEResponseLogin(ceLoginResponseFault, 200, "OK", "application/soap+xml;charset=utf-8");
+        assertEquals(null, zz.fault);
+        assertEquals("FAILED_AUTHENTICATION", zz.error.errorCode);
+        assertEquals("Login failure due to the invalid company!", zz.error.errorMessage);
     }
 
     @Test
@@ -100,5 +113,13 @@ public class TestSf {
         assertEquals("INVALID_SESSION", zz.fault.errorCode);
         assertEquals("Invalid SFAPI session!", zz.fault.errorMessage);
         assertEquals("Invalid SFAPI session!", zz.fault.reasonText);
+    }
+
+    @Test
+    public void parseOData() throws ODataException, IOException {
+        InputStream is = getClass().getResourceAsStream("/ODataV2-Metadata.xml");
+        EdmxChecker poc = new EdmxChecker(is);
+        poc.analyze();
+        is.close();
     }
 }
