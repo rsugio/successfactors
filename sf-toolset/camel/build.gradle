@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'java-library'
     id 'application'
+    id 'maven-publish'
 }
 
 group 'io.rsug.sf'
@@ -12,6 +13,7 @@ targetCompatibility = '1.8'
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 application {
@@ -20,8 +22,8 @@ application {
 }
 
 dependencies {
-    implementation fileTree(dir: 'C:/workspace/successfactors/sf-toolset/build/libs', include: 'sf-toolset-0.0.2.jar')
-//    implementation 'io.rsug.sf:sf-toolset:0.0.1'
+//    implementation fileTree(dir: 'C:/workspace/successfactors/sf-toolset/build/libs', include: '*.jar')
+    implementation 'io.rsug.sf:sf-toolset:0.0.2-PREVIEW'
     implementation 'org.apache.camel:camel-core:2.24.1'
     implementation 'org.apache.camel:camel-olingo2:2.24.1'
     implementation 'org.apache.camel:camel-http4:2.24.1'
@@ -37,4 +39,15 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
 
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'io.rsug.sf'
+            artifactId = 'sf-toolset-camel'
+            version = version
+            from components.java
+        }
+    }
 }

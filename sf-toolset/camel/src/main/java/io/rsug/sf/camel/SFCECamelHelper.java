@@ -2,6 +2,8 @@ package io.rsug.sf.camel;
 
 import io.rsug.sf.SFHost;
 import io.rsug.sf.compound.CEAPI;
+import io.rsug.sf.compound.CEFault;
+import io.rsug.sf.compound.CEResponse;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
@@ -12,6 +14,8 @@ import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.http.client.CookieStore;
 import org.apache.http.impl.client.BasicCookieStore;
 
+import javax.xml.stream.XMLStreamException;
+import java.io.StringReader;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -29,12 +33,25 @@ class Routes extends RouteBuilder {
     public void configure() throws Exception {
         from("direct:describeEx")
                 .onException(HttpOperationFailedException.class)
+                .maximumRedeliveries(0)
                 .onWhen(exchange -> {
                     HttpOperationFailedException exe = exchange.getException(HttpOperationFailedException.class);
-//                    System.err.println(exe.getMessage());
-//                    System.err.println(exe.getStatusCode());
-//                    System.err.println(exe.getStatusText());
-//                    System.err.println(exe.getResponseBody());
+                    CEResponse resp;
+                    CEFault fault = null;
+                    try {
+                        resp = new CEResponse(exe.getStatusCode(), exe.getStatusText()
+                                , exe.getResponseHeaders().get("Content-Type")
+                                , new StringReader(exe.getResponseBody()));
+                        fault = resp.fault;
+                    } catch (XMLStreamException e) {
+                        throw new IllegalArgumentException("Compound Employee API response is not well-formed XML");
+                    }
+                    assert fault != null;
+                    if (fault.isInvalidSession()) {
+
+                    } else {
+
+                    }
                     finished = true;
                     return true;
                 })
