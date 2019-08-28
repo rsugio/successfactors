@@ -56,4 +56,8 @@ public class CEFault {
         else
             return this.getClass().getName() + "@" + Integer.toHexString(this.hashCode());
     }
+
+    public boolean isInvalidSession() {
+        return "INVALID_SESSION".equals(errorCode);
+    }
 }

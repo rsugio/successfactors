@@ -50,6 +50,9 @@ public class XmlNames {
     static final QName sessionId = new QName(nsSF, "sessionId");
     static final QName msUntilPwdExpiration = new QName(nsSF, "msUntilPwdExpiration");
     static final QName loginResponse = new QName(nsSF, "loginResponse");
+    static final QName error2 = new QName(nsSF, "error");
+    static final QName errorCode2 = new QName(nsSF, "errorCode");
+    static final QName errorMessage2 = new QName(nsSF, "errorMessage");
     static final QName query = new QName(nsSF, "query");
     static final QName queryMore = new QName(nsSF, "queryMore");
     static final QName queryString = new QName(nsSF, "queryString");

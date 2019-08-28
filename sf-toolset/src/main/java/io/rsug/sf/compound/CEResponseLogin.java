@@ -13,11 +13,12 @@ import java.util.LinkedList;
 public class CEResponseLogin extends CEResponse {
     public final String sessionId;
     public final long msUntilPwdExpiration;
+    public final CEError error;
 
     public CEResponseLogin(Reader rd, int responseCode, String responseText, String mime) throws XMLStreamException {
         super(responseCode, responseText, mime);
         Object[] rez = parseLoginResponse(rd);
-        assert rez != null && rez.length == 3;
+        assert rez != null && rez.length == 4;
         this.fault = (CEFault) rez[0];
         this.sessionId = (String) rez[1];
         String x = (String) rez[2];
@@ -25,7 +26,7 @@ public class CEResponseLogin extends CEResponse {
             this.msUntilPwdExpiration = Long.parseLong(x);
         else
             this.msUntilPwdExpiration = -1L;
-
+        this.error = (CEError) rez[3];
     }
 
     static Object[] parseLoginResponse(Reader rd) throws XMLStreamException {
@@ -36,6 +37,8 @@ public class CEResponseLogin extends CEResponse {
         LinkedList<QName> stack = new LinkedList<>();
         String sessionId = null, msUntilPwdExpiration = null;
         CEFault fault = null;
+        CEError error = null;
+
         while (xr.hasNext()) {
             XMLEvent xe = xr.nextEvent();
             if (xe.isStartElement()) {
@@ -44,6 +47,8 @@ public class CEResponseLogin extends CEResponse {
                 stack.push(qn);
                 if (XmlNames.Fault.equals(qn)) {
                     fault = CEFault.parseFault(xr, stack);
+                } else if (XmlNames.error2.equals(qn)) {
+                    error = CEError.parseError(xr, stack);
                 }
             } else if (xe.isEndElement()) {
                 EndElement ee = xe.asEndElement();
@@ -61,6 +66,6 @@ public class CEResponseLogin extends CEResponse {
             }
         }
         assert stack.size() == 0;
-        return new Object[]{fault, sessionId, msUntilPwdExpiration};
+        return new Object[]{fault, sessionId, msUntilPwdExpiration, error};
     }
 }
