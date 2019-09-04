@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'io.rsug.sf'
-version '0.0.2'
+version '0.0.3-SNAPSHOT'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -23,7 +23,7 @@ application {
 
 dependencies {
 //    implementation fileTree(dir: 'C:/workspace/successfactors/sf-toolset/build/libs', include: '*.jar')
-    implementation 'io.rsug.sf:sf-toolset:0.0.2-PREVIEW'
+    implementation 'io.rsug.sf:sf-toolset:0.0.3-SNAPSHOT'
     implementation 'org.apache.camel:camel-core:2.24.1'
     implementation 'org.apache.camel:camel-olingo2:2.24.1'
     implementation 'org.apache.camel:camel-http4:2.24.1'
